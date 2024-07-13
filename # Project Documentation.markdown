@@ -2,54 +2,23 @@
 
 ## Table of Contents
 
-1. [Introduction](#introduction)
-2. [Installation](#installation)
-    1. [Prerequisites](#prerequisites)
-    2. [Setup](#setup)
-3. [Usage](#usage)
+1. [Installation](#installation)
+    1. [Setup](#setup)
+2. [Usage](#usage)
     1. [Running the Application](#running-the-application)
     2. [Available Endpoints](#available-endpoints)
-4. [Development](#development)
+3. [Development](#development)
     1. [Code Structure](#code-structure)
         1. [Overview](#overview)
         2. [Detailed Breakdown](#detailed-breakdown)
         3. [Reverse Engineering](#reverse-engineering)
-    2. [Contributing](#contributing)
-        1. [Guidelines](#guidelines)
-        2. [Setting Up Development Environment](#setting-up-development-environment)
-        3. [Code Style and Best Practices](#code-style-and-best-practices)
-5. [Testing](#testing)
-6. [API Reference](#api-reference)
-7. [Architecture](#architecture)
-8. [Technology Stack](#technology-stack)
-9. [Core Concepts](#core-concepts)
-10. [Terminology](#terminology)
-11. [File Disposition Scheme](#file-disposition-scheme)
-12. [License](#license)
-13. [Contact](#contact)
+3. [API Reference](#api-reference)
+5. [File Disposition Scheme](#file-disposition-scheme)
 
-## Introduction
-
-- **DMART** is a data service layer that makes it easy to build solutions with small to medium amounts of data (up to 300 million entries). It's not designed for systems with large data sets or complex data models that need transactions.
-
-- **DMART** is a general-purpose system for managing information, also known as Data-as-a-Service (DaaS).
-
-- **DMART** is a low-code platform for managing different types of data (structured, unstructured, and binary). It helps you manage your valuable data assets easily, allowing you to create, share, and extend data. This way, your important data can be kept as the main version and act as the single source of truth.
 
 ## Installation
 
 Before running the application locally, there are several steps to follow for setting up the project.
-
-
-- ### Prerequisites
-Before installing DMART, ensure you have the following prerequisites installed:
-- python >=3.11
-- pip
-- git 
-- jq 
-- redis>=7.2
-- RedisJSON (rejson) >= 2.6
-- RediSearch >= 2.8
 
 - ### Setup
 1. ### Enable kefahi dnf from copr to download Redis modules
@@ -132,8 +101,8 @@ To run the Application We need to Create and Admin Password for authentication
 
 1. ### Set the Admin Password
    before Running this command make sure you are inside the Following Directory:
-   <br>
-   <br>
+   <br/>
+   <br/>
    root/dmart/backend/
    
    ```Bash
@@ -146,6 +115,65 @@ To run the Application We need to Create and Admin Password for authentication
    ```
 
 ### Available Endpoints
+### Info Directory
+#### GET /me
+Gets the shortname of the authenticated user.
+
+   <details>
+     <summary><code>GET</code> <code><b>/me</b></code> <code>(gets the shortname of the authenticated user)</code></summary>
+   
+   #### Description
+   This endpoint returns the shortname of the authenticated user. The user must be authenticated using a JWT token.
+      
+   #### Authentication
+   Requires JWT authentication.
+
+   #### Parameters
+   > | Name        | Type     | Data Type | Description                   |
+   > |-------------|----------|-----------|-------------------------------|
+   > | shortname   | required | string    | Authenticated user's shortname|
+   
+   #### Responses
+   > | HTTP Code | Content-Type         | Response                                                                                     |
+   > |-----------|----------------------|----------------------------------------------------------------------------------------------|
+   > | `200`     | `application/json`   | `{"status":"success","attributes":{"shortname":"<shortname>"}}`                              |
+   > | `401`     | `application/json`   | `{"status":"error","error":{"type":"access","code":"NOT_ALLOWED","message":"Unauthorized"}}`  |
+   
+   #### Example cURL
+   ```bash
+   curl -X GET -H "Authorization: Bearer <token>" http://0.0.0.0:8282/me
+   ```
+ </details>
+
+
+### GET /settings
+Gets the settings if the user is authenticated as 'dmart'.
+
+<details>
+  <summary><code>GET</code> <code><b>/settings</b></code> <code>(gets the settings if authenticated as 'dmart')</code></summary>
+  
+  #### Description
+  This endpoint retrieves settings data if the authenticated user's shortname is 'dmart'. Otherwise, it returns a 401 Unauthorized error.
+  
+  #### Authentication
+  Requires JWT authentication.
+  
+  #### Parameters
+  > | Name        | Type     | Data Type | Description                          |
+  > |-------------|----------|-----------|--------------------------------------|
+  > | shortname   | required | string    | Authenticated user's shortname       |
+  
+  #### Responses
+  > | HTTP Code | Content-Type         | Response                                                                                     |
+  > |-----------|----------------------|----------------------------------------------------------------------------------------------|
+  > | `200`     | `application/json`   | `{"status":"success","attributes":<settings_data>}`                                            |
+  > | `401`     | `application/json`   | `{"status":"error","error":{"type":"access","code":"NOT_ALLOWED","message":"Unauthorized"}}`  |
+  
+  #### Example cURL
+  ```bash
+  curl -X GET -H "Authorization: Bearer <token>" http://0.0.0.0:8282/settings
+  ```
+</details>
 
 ## Development
 
